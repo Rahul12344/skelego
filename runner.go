@@ -17,27 +17,27 @@ func NewRunner(configFile string) *Runner {
 }
 
 //Configure sets up configurations
-func (r *Runner) Configure(logger Logging, conf Config) {
+func (r *Runner) Configure(conf Config) {
 
 }
 
 //Connect connects to services
-func (r *Runner) Connect(ctx context.Context, logger Logging, config Config, services ...Service) {
+func (r *Runner) Connect(ctx context.Context, config Config, services ...Service) {
 	for _, service := range services {
-		service.Connect(ctx, config, logger)
+		service.Connect(ctx, config)
 	}
 }
 
 //Start starts up services that have been added
-func (r *Runner) Start(ctx context.Context, logger Logging, config Config, services ...Service) {
+func (r *Runner) Start(ctx context.Context, config Config, services ...Service) {
 	for _, service := range services {
-		service.Start(ctx, logger)
+		service.Start(ctx)
 	}
 }
 
 //Stop shuts down services
-func (r *Runner) Stop(ctx context.Context, logger Logging, config Config, services ...Service) {
+func (r *Runner) Stop(ctx context.Context, config Config, services ...Service) {
 	for _, service := range services {
-		service.Stop(ctx, logger)
+		service.Stop(ctx)
 	}
 }

@@ -17,7 +17,7 @@ type configuration struct {
 }
 
 //NewConfig creates new config
-func NewConfig(configFile string, logger Logging, dirs ...string) Config {
+func NewConfig(configFile string, dirs ...string) Config {
 	v := viper.New()
 	v.SetConfigName(configFile)
 
@@ -29,7 +29,7 @@ func NewConfig(configFile string, logger Logging, dirs ...string) Config {
 			v.AddConfigPath(dir)
 		}
 	}
-
+	logger := Logger()
 	if err := v.ReadInConfig(); err != nil {
 		logger.LogFatal(err.Error())
 	}

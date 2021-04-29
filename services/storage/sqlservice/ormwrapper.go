@@ -46,8 +46,9 @@ func (s *orm) Configurifier(conf skelego.Config) {
 
 //Connect connects to database instance.
 //TODO: add connection pool
-func (s *orm) Connect(ctx context.Context, config skelego.Config, logger skelego.Logging) {
+func (s *orm) Connect(ctx context.Context, config skelego.Config) {
 	//databaseType := config.Get("storage.engine").(string)
+	logger := skelego.Logger()
 	host := config.Get("storage.host")
 	port := config.Get("storage.port")
 	database := config.Get("storage.name")
@@ -72,17 +73,19 @@ func (s *orm) dbURI(databaseHost, port, username, databaseName, password interfa
 }
 
 //Start empty
-func (s *orm) Start(ctx context.Context, logger skelego.Logging) {
+func (s *orm) Start(ctx context.Context) {
+	logger := skelego.Logger()
 	logger.LogEvent("Starting database...")
 	return
 }
 
 //Shuts down database... to be run on server shutdown
-func (s *orm) Stop(ctx context.Context, logger skelego.Logging) {
-	s.shutdown(logger)
+func (s *orm) Stop(ctx context.Context) {
+	s.shutdown()
 }
 
-func (s *orm) shutdown(logger skelego.Logging) error {
+func (s *orm) shutdown() error {
+	logger := skelego.Logger()
 	if err := s.client.Close(); err != nil {
 		logger.LogError(err.Error())
 		return err

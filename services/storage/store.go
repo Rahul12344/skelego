@@ -15,6 +15,6 @@ type Store interface {
 
 //Schema Interface for an object in a database.
 type Schema interface {
-	Migrate(skelego.Logging)
+	Migrate()
 	TableName() string
 }

@@ -43,7 +43,7 @@ func (s *db) Configurifier(conf skelego.Config) {
 
 //Connect connects to database instance.
 //TODO: add connection pool
-func (s *db) Connect(ctx context.Context, config skelego.Config, logger skelego.Logging) {
+func (s *db) Connect(ctx context.Context, config skelego.Config) {
 	//databaseType := config.Get("storage.engine").(string)
 	port := config.Get("storage.host")
 	database := config.Get("storage.name")
@@ -54,6 +54,7 @@ func (s *db) Connect(ctx context.Context, config skelego.Config, logger skelego.
 	if err != nil {
 		print(err.Error())
 	}
+	logger := skelego.Logger()
 	logger.LogEvent("Successfully connected!", db)
 	s.client = db
 	if err := db.Ping(); err != nil {
@@ -66,17 +67,19 @@ func (s *db) dbURI(databaseHost, username, databaseName, password interface{}) s
 }
 
 //Start empty
-func (s *db) Start(ctx context.Context, logger skelego.Logging) {
+func (s *db) Start(ctx context.Context) {
+	logger := skelego.Logger()
 	logger.LogEvent("Starting database...")
 	return
 }
 
 //Shuts down database... to be run on server shutdown
-func (s *db) Stop(ctx context.Context, logger skelego.Logging) {
-	s.shutdown(logger)
+func (s *db) Stop(ctx context.Context) {
+	s.shutdown()
 }
 
-func (s *db) shutdown(logger skelego.Logging) error {
+func (s *db) shutdown() error {
+	logger := skelego.Logger()
 	if err := s.client.Close(); err != nil {
 		logger.LogError(err.Error())
 		return err

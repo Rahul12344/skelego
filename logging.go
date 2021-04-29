@@ -6,6 +6,10 @@ import (
 	"sync"
 )
 
+var (
+	globalLogger *Logging
+)
+
 //Logging Logging functions necessary for application,
 type Logging interface {
 	LogEvent(string, ...interface{})
@@ -35,4 +39,12 @@ func (logs *logger) LogError(val string, args ...interface{}) {
 //Logs fatal event and terminates.
 func (logs *logger) LogFatal(val string, args ...interface{}) {
 	log.Fatalf(val, args...)
+}
+
+//New Logger
+func Logger() Logging {
+	if globalLogger == nil {
+		*globalLogger = NewLogger()
+	}
+	return *globalLogger
 }

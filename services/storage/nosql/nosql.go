@@ -34,11 +34,11 @@ func (s *db) Connect(ctx context.Context, config skelego.Config) {
 
 }
 
-func (s *db) Start(ctx context.Context, logger skelego.Logging) {
+func (s *db) Start(ctx context.Context) {
 
 }
 
-func (s *db) Stop(ctx context.Context, logger skelego.Logging) {
+func (s *db) Stop(ctx context.Context) {
 
 }
 
@@ -49,7 +49,7 @@ func (s *db) Check(ctx context.Context) {
 //Migrate migrates tables into database
 func (s *db) Port(documents ...storage.Schema) {
 	for _, document := range documents {
-		document.Create()
+		document.Migrate()
 	}
 }
 
@@ -69,5 +69,10 @@ func (s *db) Update(mod storage.Schema) error {
 
 //Simple DELETE... FROM... WHERE... statement
 func (s *db) Delete(rows ...storage.Schema) error {
+	return nil
+}
+
+//DB returns database information
+func (s *db) DB() error {
 	return nil
 }
