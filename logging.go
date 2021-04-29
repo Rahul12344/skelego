@@ -3,11 +3,10 @@ package skelego
 import (
 	"fmt"
 	"log"
-	"sync"
 )
 
 var (
-	globalLogger *Logging
+	globalLogger Logging
 )
 
 //Logging Logging functions necessary for application,
@@ -18,12 +17,14 @@ type Logging interface {
 }
 
 type logger struct {
-	lock sync.RWMutex
+	name string
 }
 
 //NewLogger Creates a new logger - should have exactly one logger per application.
 func NewLogger() Logging {
-	return &logger{}
+	return &logger{
+		name: "Logger",
+	}
 }
 
 //Logs event.
@@ -44,7 +45,7 @@ func (logs *logger) LogFatal(val string, args ...interface{}) {
 //New Logger
 func Logger() Logging {
 	if globalLogger == nil {
-		*globalLogger = NewLogger()
+		globalLogger = NewLogger()
 	}
-	return *globalLogger
+	return globalLogger
 }
