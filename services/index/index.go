@@ -15,9 +15,9 @@ import (
 type Index interface {
 	skelego.Service
 	CreateIndex(string, ...Document)
-	SearchIndex(context.Context, string, *strings.Reader, skelego.Logging) []Document
+	SearchIndex(context.Context, string, *strings.Reader) []Document
 	ElasticSearch() *es8.Client
-	Query(string, skelego.Logging) *strings.Reader
+	Query(string) *strings.Reader
 }
 
 //Document Index document
