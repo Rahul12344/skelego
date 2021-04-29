@@ -28,7 +28,6 @@ type Document interface {
 type indexer struct {
 	clientInit sync.Once
 	client     *es8.Client
-	conn       chan error
 }
 
 //NewIndex new index
