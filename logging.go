@@ -6,22 +6,15 @@ import (
 )
 
 var (
-	globalLogger Logging
+	globalLogger *logger
 )
-
-//Logging Logging functions necessary for application,
-type Logging interface {
-	LogEvent(string, ...interface{})
-	LogError(string, ...interface{})
-	LogFatal(string, ...interface{})
-}
 
 type logger struct {
 	name string
 }
 
 //NewLogger Creates a new logger - should have exactly one logger per application.
-func NewLogger() Logging {
+func NewLogger() *logger {
 	return &logger{
 		name: "Logger",
 	}
@@ -43,7 +36,7 @@ func (logs *logger) LogFatal(val string, args ...interface{}) {
 }
 
 //New Logger
-func Logger() Logging {
+func Logger() *logger {
 	if globalLogger == nil {
 		globalLogger = NewLogger()
 	}
