@@ -42,7 +42,8 @@ func (ses *indexer) Configurifier(conf skelego.Config) {
 }
 
 //Connect connects to an Elasticsearch client
-func (ses *indexer) Connect(ctx context.Context, config skelego.Config, logger skelego.Logging) {
+func (ses *indexer) Connect(ctx context.Context, config skelego.Config) {
+	logger := skelego.Logger()
 	ses.clientInit.Do(func() {
 		c, err := es8.NewDefaultClient()
 		if err != nil {
@@ -55,15 +56,15 @@ func (ses *indexer) Connect(ctx context.Context, config skelego.Config, logger s
 }
 
 //Start Logs the start of the Index service
-func (ses *indexer) Start(ctx context.Context, logger skelego.Logging) {
+func (ses *indexer) Start(ctx context.Context) {
+	logger := skelego.Logger()
 	logger.LogEvent("Starting elasticsearch index service...")
-	return
 }
 
 //Stop Stops the execution of the Index service
-func (ses *indexer) Stop(ctx context.Context, logger skelego.Logging) {
+func (ses *indexer) Stop(ctx context.Context) {
+	logger := skelego.Logger()
 	logger.LogEvent("Stopping elasticsearch index service...")
-	return
 }
 
 //CreateIndex Creates an Elasticsearch index using a provided JSON file or a list of entries that follow the JSON format
@@ -76,7 +77,8 @@ func (ses *indexer) ElasticSearch() *es8.Client {
 }
 
 //Query Creates query from map
-func (ses *indexer) Query(conditional string, logger skelego.Logging) *strings.Reader {
+func (ses *indexer) Query(conditional string) *strings.Reader {
+	logger := skelego.Logger()
 	query := `{"query": {`
 	query = query + conditional
 	query = query + `}`
@@ -85,7 +87,7 @@ func (ses *indexer) Query(conditional string, logger skelego.Logging) *strings.R
 	isValid := json.Valid([]byte(query)) // returns bool
 
 	// Default query is "{}" if JSON is invalid
-	if isValid == false {
+	if !isValid {
 		logger.LogError("constructQuery() ERROR: query string not valid:", query)
 		logger.LogEvent("Using default match_all query")
 		query = "{}"
@@ -105,7 +107,8 @@ func (ses *indexer) Query(conditional string, logger skelego.Logging) *strings.R
 }
 
 //SearchIndex Searches an index on some query
-func (ses *indexer) SearchIndex(ctx context.Context, index string, query *strings.Reader, logger skelego.Logging) []Document {
+func (ses *indexer) SearchIndex(ctx context.Context, index string, query *strings.Reader) []Document {
+	logger := skelego.Logger()
 	res, err := ses.client.Search(
 		ses.client.Search.WithContext(ctx),
 		ses.client.Search.WithIndex(index),
